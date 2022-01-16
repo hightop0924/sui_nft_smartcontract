@@ -1,4 +1,3 @@
-// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
 /// Allow a trusted oracle to mint a copy of NFT from a different chain. There can
@@ -23,6 +22,32 @@ module nfts::cross_chain_airdrop {
     /// The address of the source contract
     struct SourceContractAddress has store, copy {
         address: vector<u8>,
+    }
+
+    /// Contains the Airdrop info for one contract address on Ethereum
+    struct PerContractAirdropInfo has store {
+        /// A single contract address on Ethereum
+        source_contract_address: SourceContractAddress,
+
+        /// The Ethereum token ids whose Airdrop has been claimed. These
+        /// are stored to prevent the same NFT from being claimed twice
+        // TODO: replace u64 with u256 once the latter is supported
+        // <https://github.com/MystenLabs/fastnft/issues/618>
+        // TODO: replace this with SparseSet for O(1) on-chain uniqueness check
+        claimed_source_token_ids: vector<TokenID>
+    }
+
+    /// The Sui representation of the original ERC721 NFT on Eth
+    struct ERC721 has key, store {
+        id: UID,
+        /// The address of the source contract, e.g, the Ethereum contract address
+        source_contract_address: SourceContractAddress,
+        /// The metadata associated with this NFT
+        metadata: ERC721Metadata,
+    }
+
+    // Error codes
+
     /// Trying to claim a token that has already been claimed
     const ETokenIDClaimed: u64 = 0;
 

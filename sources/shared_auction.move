@@ -1,4 +1,3 @@
-// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
 /// This is an implementation of an English auction
@@ -23,6 +22,32 @@
 /// - the owner eventually ends the auction
 ///   - if no bids were received, the item goes back to the owner
 ///   - otherwise the funds accumulated in the auction go to the owner
+///   and the item goes to the bidder that won the auction
+
+module nfts::shared_auction {
+    use sui::coin::{Self, Coin};
+    use sui::sui::SUI;
+    use sui::tx_context::{Self, TxContext};
+
+    use nfts::auction_lib::{Self, Auction};
+
+    // Error codes.
+
+    /// An attempt to end auction by a different user than the owner
+    const EWrongOwner: u64 = 1;
+
+    // Entry functions.
+
+    /// Creates an auction. This is executed by the owner of the asset
+    /// to be auctioned.
+    public entry fun create_auction<T: key + store >(to_sell: T, ctx: &mut TxContext) {
+        let auction = auction_lib::create_auction(to_sell, ctx);
+        auction_lib::share_object(auction);
+    }
+
+    /// Sends a bid to the auction. The result is either successful
+    /// change of the auction state (if bid was high enough) or return
+    /// of the funds (if the bid was too low). This is executed by a
     /// bidder.
     public entry fun bid<T: key + store>(
         coin: Coin<SUI>, auction: &mut Auction<T>, ctx: &mut TxContext
