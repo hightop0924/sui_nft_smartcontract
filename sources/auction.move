@@ -1,3 +1,4 @@
+// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
 ///  This module is an implementation of an English auction

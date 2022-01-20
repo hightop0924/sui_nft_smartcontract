@@ -1,3 +1,4 @@
+// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
 module nfts::chat {
@@ -17,27 +18,6 @@ module nfts::chat {
     /// Sui Chat NFT (i.e., a post, retweet, like, chat message etc).
     struct Chat has key, store {
         id: UID,
-        // The ID of the chat app.
-        app_id: address,
-        // Post's text.
-        text: String,
-        // Set if referencing an another object (i.e., due to a Like, Retweet, Reply etc).
-        // We allow referencing any object type, not only Chat NFTs.
-        ref_id: Option<address>,
-        // app-specific metadata. We do not enforce a metadata format and delegate this to app layer.
-        metadata: vector<u8>,
-    }
-
-    /// Simple Chat.text getter.
-    public fun text(chat: &Chat): String {
-        chat.text
-    }
-
-    /// Mint (post) a Chat object.
-    fun post_internal(
-        app_id: address,
-        text: vector<u8>,
-        ref_id: Option<address>,
         metadata: vector<u8>,
         ctx: &mut TxContext,
     ) {
