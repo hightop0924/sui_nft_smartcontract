@@ -18,6 +18,27 @@ module nfts::cross_chain_airdrop_tests {
     const SOURCE_CONTRACT_ADDRESS: vector<u8> = x"BC4CA0EdA7647A8aB7C2061c2E118A18a936f13D";
     const SOURCE_TOKEN_ID: u64 = 101;
     const NAME: vector<u8> = b"BoredApeYachtClub";
+    const TOKEN_URI: vector<u8> = b"ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/101";
+
+    struct Object has key {
+        id: UID,
+    }
+
+    #[test]
+    fun test_claim_airdrop() {
+        let (scenario, oracle_address) = init_scenario();
+
+        // claim a token
+        claim_token(&mut scenario, oracle_address, SOURCE_TOKEN_ID);
+
+        // verify that the recipient has received the nft
+        assert!(owns_object(RECIPIENT_ADDRESS), EOBJECT_NOT_FOUND);
+        test_scenario::end(scenario);
+    }
+
+    #[test]
+    #[expected_failure(abort_code = cross_chain_airdrop::ETokenIDClaimed)]
+    fun test_double_claim() {
         let (scenario, oracle_address) = init_scenario();
 
         // claim a token

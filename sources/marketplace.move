@@ -18,6 +18,27 @@
 /// Profits storage is also attached to the `Marketplace` (indexed by `address`):
 /// ```
 ///                   /--->Coin<COIN>
+/// (Marketplace<COIN>)--->Coin<COIN>
+///                   \--->Coin<COIN>
+/// ```
+module nfts::marketplace {
+    use sui::dynamic_object_field as ofield;
+    use sui::tx_context::{Self, TxContext};
+    use sui::object::{Self, ID, UID};
+    use sui::coin::{Self, Coin};
+    use sui::transfer;
+
+    /// For when amount paid does not match the expected.
+    const EAmountIncorrect: u64 = 0;
+    /// For when someone tries to delist without ownership.
+    const ENotOwner: u64 = 1;
+
+    /// A shared `Marketplace`. Can be created by anyone using the
+    /// `create` function. One instance of `Marketplace` accepts
+    /// only one type of Coin - `COIN` for all its listings.
+    struct Marketplace<phantom COIN> has key {
+        id: UID,
+    }
 
     /// A single listing which contains the listed item and its
     /// price in [`Coin<COIN>`].
