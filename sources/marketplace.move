@@ -1,4 +1,3 @@
-// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
 /// Basic `Marketplace` implementation. Supports listing of any assets,
