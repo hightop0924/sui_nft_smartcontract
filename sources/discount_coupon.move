@@ -1,6 +1,3 @@
-// Copyright (c) Mysten Labs, Inc.
-// SPDX-License-Identifier: Apache-2.0
-
 module nfts::discount_coupon {
     use sui::coin;
     use sui::object::{Self, UID};

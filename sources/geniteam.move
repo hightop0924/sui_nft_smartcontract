@@ -1,6 +1,3 @@
-// Copyright (c) Mysten Labs, Inc.
-// SPDX-License-Identifier: Apache-2.0
-
 module nfts::geniteam {
     use sui::object::{Self, ID, UID};
     use sui::object_bag::{Self, ObjectBag};

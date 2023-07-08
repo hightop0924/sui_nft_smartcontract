@@ -1,4 +1,4 @@
-# NFTs
+# Sui NFTs Smart Contract
 
 * Num: Issuing the first ten natural numbers as collectible NFT's.
 * Marketplace: An opensea-like marketplace built with shared objects.
